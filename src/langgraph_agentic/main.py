@@ -12,7 +12,10 @@ def load_app():
     if not user_controls:
         st.warning("Please select a LLM and a Use Case")
         return
-    user_message = st.chat_input("Ask a question about your documents")
+    if st.session_state.IsFetchButtonClicked:
+        user_message = st.session_state.timeframe
+    else:
+        user_message = st.chat_input("Ask a question about your documents")
 
     if user_message:
         try:
