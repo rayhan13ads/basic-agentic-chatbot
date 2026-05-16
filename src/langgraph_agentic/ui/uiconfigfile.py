@@ -18,3 +18,8 @@ class Config:
     def get_page_title(self):
         return self.config["DEFAULT"].get("PAGE_TITLE")
     
+    def get_groq_api_key(self):
+        return self.config["DEFAULT"].get("GROQ_API_KEY")
+    def get_tavily_api_key(self):
+        return self.config["DEFAULT"].get("TAVILY_API_KEY")
+    

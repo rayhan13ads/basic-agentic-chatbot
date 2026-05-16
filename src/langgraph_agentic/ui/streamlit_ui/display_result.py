@@ -23,3 +23,33 @@ class DisplayResultStreamlit:
                             st.write(user_message)
                         with st.chat_message("assistant"):
                             st.write(value["messages"].content)
+        elif usecase == "Chatbot with Web Search":
+            initial_state = {"messages":[user_message]}
+            res = graph.invoke(initial_state)
+            for message in res["messages"]:
+                if type(message) == HumanMessage:
+                    with st.chat_message("user"):
+                        st.write(message.content)
+                elif type(message) == AIMessage and message.content:
+                    with st.chat_message("assistant"):
+                        st.write(message.content)
+                elif type(message) == ToolMessage:
+                    with st.chat_message("ai"):
+                        st.write("Tool Call Start")
+                        st.write(message.content)
+                        st.write("Tool Call End")
+
+        elif usecase == "AI News":
+            frequency = self.user_message
+            with st.spinner('Fetching and summarizing latest AI news...'):
+                result = graph.invoke({'messages':frequency})
+                try:
+                    AI_NEWS_PATH = f"./AINews/{frequency}_summary.md"
+                    with open(AI_NEWS_PATH, "r", encoding="utf-8") as f:
+                        summary_content = f.read()
+                    st.markdown(summary_content,unsafe_allow_html=True)
+                except FileNotFoundError:
+                    st.error("Error: Summary file not found.")
+                except Exception as e:
+                    st.error(f"An unexpected error occurred: {str(e)}")
+           
